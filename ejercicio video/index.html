@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Video de background y localStorage</title>
+    
+</head>
+<body>
+    
+    <video id="video-bg" autoplay muted loop>  <!--asignamos un identificador de video, con autoplay es para que se reproduzca en automatico-->
+        <source src="video1.mp4" type="video/mp4">
+        <source src="video2.mp4" type="video/mp4">
+        <source src="video3.mp4" type="video/mp4">
+    </video>
+
+    <div class="button-container"> <!--botones para el video-->
+        <button onclick="setBackground('video1.mp4')">Video 1</button>
+        <button onclick="setBackground('video2.mp4')">Video 2</button>
+        <button onclick="setBackground('video3.mp4')">Video 3</button>
+    </div>
+
+    <script>
+        const videoElement = document.getElementById('video-bg');
+
+        function setBackground(videoSource) {
+            //Guardamos el video seleccionado en localStorage
+            localStorage.setItem('selectedVideo', videoSource);
+            // Cambiamos la fuente del video
+            updateVideoSource(videoSource);
+        }
+
+        function updateVideoSource(videoSource) {
+            const sources = videoElement.getElementsByTagName('source');
+            for (let source of sources) {
+                if (source.src.endsWith(videoSource)) {
+                    videoElement.src = source.src;
+                    videoElement.load(); //recargamos el video
+                    videoElement.play(); // Nos aseguramos que el video se reproduce
+                    break;
+                }
+            }
+        }
+
+        window.onload = function() {
+            const selectedVideo = localStorage.getItem('selectedVideo') || 'video1.mp4';
+            updateVideoSource(selectedVideo);
+        };
+    </script>
+</body>
+</html>
